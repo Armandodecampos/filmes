@@ -32,6 +32,7 @@
       background-color: var(--dark-background);
       color: var(--text-color);
       overflow-y: scroll; /* Mantido para permitir scroll personalizado no body */
+      background:#555;
     }
 
     /* Adicionar padding-top ao main para acomodar o cabeçalho fixo */
@@ -45,7 +46,7 @@
     }
 
     body::-webkit-scrollbar-track {
-      background: #282828; /* Cor de fundo da trilha da barra de rolagem */
+      background: #222; /* Cor de fundo da trilha da barra de rolagem */
     }
 
     body::-webkit-scrollbar-thumb {
@@ -82,10 +83,10 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
     h1 span { color: var(--primary-red); }
 
     .search-container {
-      padding: 13px;
+      padding: 15px;
       background-color: var(--dark-background);
       position: fixed;
-      top: 45px;
+      top: 44px;
       left: 0;
       width: 100%;
       z-index: 997;
@@ -137,7 +138,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 
 /* Personalização da barra de rolagem */
 .category-container2::-webkit-scrollbar {
-  height: 20px;
+  height: 15px;
 }
 
 .category-container2::-webkit-scrollbar-track {
@@ -150,7 +151,7 @@ background:#222;
 
 
 .category-container {
-  padding: 20px;
+  padding: 10px;
   background-color: var(--medium-gray);
   margin: auto;
   width: fit-content;
@@ -170,6 +171,7 @@ background:#222;
       font-size: 1em;
       cursor: pointer;
       transition: background-color 0.2s ease, transform 0.2s ease;
+      background:#555;
     }
 
     .category-button:hover {
@@ -195,13 +197,14 @@ background:#222;
 
     .movie-card {
       background-color: #2a2a2a;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.7);
       width: 220px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       transition: transform 0.3s ease;
+      outline:5px solid #222;
     }
 
     .movie-card:hover {
@@ -263,14 +266,14 @@ background:#222;
     }
 
     .back-button {
-    width:50px;
-    height:50px;
+    width:40px;
+    height:40px;
       background-color: var(--primary-red);
       color: #fff;
       border: none;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 25px;
+      font-size: 20px;
       fotn-weight:bold;
     }
 
@@ -278,7 +281,7 @@ background:#222;
       text-align: center;
       padding: 50px;
       font-size: 1.5em;
-      color: #888;
+      color: #111;
       display: none;
       margin-top: 50px;
     }
