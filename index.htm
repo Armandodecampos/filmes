@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MovieFlix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Reset básico e box-sizing para melhor controle de layout */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-red: #f20;
+      --dark-background: #141414;
+      --medium-gray: #333;
+      --text-color: #e0e0e0;
+      --card-background: #222;
+    }
+    
+    /* Remove o highlight azul de seleção em dispositivos móveis */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0; /* Remover padding-top aqui */
+      background-color: var(--dark-background);
+      color: var(--text-color);
+      overflow-y: scroll; /* Mantido para permitir scroll personalizado no body */
+    }
+
+    /* Adicionar padding-top ao main para acomodar o cabeçalho fixo */
+    main {
+      padding-top: 200px; /* Ajuste este valor conforme a altura total do seu cabeçalho fixo + barra de pesquisa + categorias */
+    }
+
+    /* Personalização da barra de rolagem para o body */
+    body::-webkit-scrollbar {
+      width: 12px; /* Largura da barra de rolagem */
+    }
+
+    body::-webkit-scrollbar-track {
+      background: #282828; /* Cor de fundo da trilha da barra de rolagem */
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background:#555;
+    }
+
+
+    header {
+      background-color: var(--dark-background);
+      color: #fff;
+      padding: 5px 20px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      position: fixed;
+      top: 0;
+      left:0;
+      right: 0;
+      margin:auto;
+      z-index: 999;
+      display: flex;
+      justify-content: center; /* Centraliza horizontalmente o h1 */
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.0em;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      max-width: 1200px; /* Limita a largura do título, se necessário */
+      width: 100%; /* Garante que ocupe a largura disponível dentro do flex container */
+    }
+    h1 span { color: var(--primary-red); }
+
+    .search-container {
+      padding: 13px;
+      background-color: var(--dark-background);
+      position: fixed;
+      top: 45px;
+      left: 0;
+      width: 100%;
+      z-index: 997;
+      display: flex;
+      justify-content: center; /* Centraliza horizontalmente o conteúdo */
+      align-items: center;
+      gap: 10px;
+      border-bottom: 3px solid #555;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    #search-input {
+      width: 100%;
+      max-width: 500px;
+      padding: 5px 15px 5px 40px;
+      border: 1px solid #555;
+      border-radius: 25px;
+      font-size: 1.1em;
+      background-color: #444;
+      color: var(--text-color);
+      outline: none;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 80%;
+      max-width: 500px; /* Limita a largura do wrapper do input */
+    }
+
+    .search-input-wrapper i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+    }
+	.category-container2 {
+  position: fixed;
+  margin: auto;
+  top: 92px;
+  left: 0;
+  right: 0;
+  z-index: 998;
+  white-space: nowrap;
+  overflow-x: scroll;
+  background-color: var(--dark-background);
+  border-bottom: 1px solid #444;
+}
+
+/* Personalização da barra de rolagem */
+.category-container2::-webkit-scrollbar {
+  height: 20px;
+}
+
+.category-container2::-webkit-scrollbar-track {
+background:#222;
+}
+
+.category-container2::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+
+.category-container {
+  padding: 20px;
+  background-color: var(--medium-gray);
+  margin: auto;
+  width: fit-content;
+  display: flex;
+  gap: 10px;
+  padding-bottom: 20px;
+  background-color: var(--dark-background);
+}
+
+    .category-button {
+      flex-shrink: 0;
+      background-color: #555;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .category-button:hover {
+      background-color: #777;
+      transform: translateY(-2px);
+    }
+
+    .category-button.active {
+      background-color: var(--primary-red);
+      font-weight: bold;
+    }
+
+    .movie-list-container {
+      padding: 250px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center; /* Centraliza os cartões de filme */
+      gap: 30px;
+      max-width: 1200px; /* Define uma largura máxima para o container da lista de filmes */
+      margin: 0 auto; /* Centraliza o container na tela */
+      box-sizing: border-box; /* Inclui padding na largura */
+    }
+
+    .movie-card {
+      background-color: #2a2a2a;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      width: 220px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-10px) scale(1.03);
+    }
+
+    .movie-card img {
+  width: 100%;
+  height: 300px; /* You can adjust this height or set it to 'auto' for dynamic sizing */
+  object-fit: contain; /* This ensures the entire image is visible, scaling it down if necessary */
+  max-width: 100%; /* Guarantees the image fits within its container's width */
+  height: auto; /* Maintains the image's aspect ratio */
+}
+
+    .movie-card h3 {
+      padding: 15px 10px;
+      margin: 0;
+      font-size: 1.2em;
+      text-align: center;
+      background-color: #2a2a2a;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .player-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.98);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .player-overlay.active { display: flex; }
+
+    .video-container {
+      width: 90%;
+      max-width:600px;
+      aspect-ratio:2/1.5;
+      max-height:50%;
+      position: relative;
+      background-color: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+      margin-bottom: 30px;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .back-button {
+    width:50px;
+    height:50px;
+      background-color: var(--primary-red);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 25px;
+      fotn-weight:bold;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 50px;
+      font-size: 1.5em;
+      color: #888;
+      display: none;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Tela<span>Livre</span></h1>
+  </header>
+<div class="category-container2">
+  		<div class="category-container" id="category-container"></div>
+	</div>
+  <div class="search-container">
+    <div class="search-input-wrapper">
+      <i class="fas fa-search"></i>
+      <input type="search" id="search-input" placeholder="Pesquisar filmes...">
+    </div>
+  </div>
+  <main class="movie-list-container" id="movie-list"></main>
+
+  <div class="no-results" id="no-results-message">
+    Nenhum filme encontrado. Tente pesquisar por outras palavras-chave ou categorias.
+  </div>
+
+  <div class="player-overlay" id="player-overlay">
+    <div class="video-container">
+      <iframe id="movie-player" allowfullscreen></iframe>
+    </div>
+    <button class="back-button" id="back-button">X</button>
+  </div>
+
+  <script>
+    const movies = [
+    
+      { name: "Super-Herói: O Filme (Dublado)", image: "https://upload.wikimedia.org/wikipedia/pt/thumb/9/94/Superhero_P%C3%B4ster.jpg/250px-Superhero_P%C3%B4ster.jpg", url: "https://www.youtube.com/embed/_J-tObfmlQA?autoplay=1&controls=1", categories: ["Comédia", "Ação", "Paródia"] },
+      { name: "Charlie Chaplin's: The Count", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/The_Count_%28poster%29.jpg/250px-The_Count_%28poster%29.jpg", url: "https://www.archive.org/download/CC_1916_09_04_TheCount/CC_1916_09_04_TheCount_512kb.mp4", categories: ["Comédia", "Clássico", "Curta-metragem"] },
+      { name: "Ecos do Além (1999 - Dublado)", image: "https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/87/90/06/19962705.jpg", url: "https://www.youtube.com/embed/8VeS1wiqnf4?autoplay=1&controls=1", categories: ["Terror"] },
+      { name: "Inferno de Dante (Legendado)", image: "https://upload.wikimedia.org/wikipedia/en/thumb/2/2f/Dante%27s_Inferno_AAE.jpg/250px-Dante%27s_Inferno_AAE.jpg", url: "https://www.youtube.com/embed/9YzMYq8THZ4?si=SqG8d8z0qP5SJjm8", categories: ["Animação", "Terror", "Drama"] },
+      { name: "Hellraiser: Renascido do Inferno (1987 - Dublado)", image: "https://upload.wikimedia.org/wikipedia/pt/thumb/f/f4/Hellraiser_1987.png/250px-Hellraiser_1987.png", url: "https://www.youtube.com/embed/IEXh0-qNIns?si=8r7TyX05hVilY7Zl", categories: ["Terror"] },
+
+
+    ];
+
+    const movieListContainer = document.getElementById('movie-list');
+    const playerOverlay = document.getElementById('player-overlay');
+    const moviePlayer = document.getElementById('movie-player');
+    const backButton = document.getElementById('back-button');
+    const searchInput = document.getElementById('search-input');
+    const noResultsMessage = document.getElementById('no-results-message');
+    const categoryContainer = document.getElementById('category-container');
+
+    let selectedCategories = ['Todos'];
+
+    // Função para remover acentos de uma string
+    function removeAccents(str) {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function getAllCategories() {
+      const categories = new Set();
+      movies.forEach(movie => movie.categories.forEach(cat => categories.add(cat)));
+      return ['Todos', ...Array.from(categories).sort()];
+    }
+
+    function renderCategoryButtons() {
+      const categories = getAllCategories();
+      categoryContainer.innerHTML = '';
+      categories.forEach(category => {
+        const button = document.createElement('button');
+        button.classList.add('category-button');
+        button.textContent = category;
+
+        if (selectedCategories.includes(category)) {
+          button.classList.add('active');
+        }
+
+        button.addEventListener('click', () => {
+          if (category === 'Todos') {
+            selectedCategories = ['Todos'];
+          } else {
+            if (selectedCategories.includes('Todos')) {
+              selectedCategories = [];
+            }
+
+            const index = selectedCategories.indexOf(category);
+            if (index > -1) {
+              selectedCategories.splice(index, 1);
+            } else {
+              selectedCategories.push(category);
+            }
+
+            if (selectedCategories.length === 0) {
+              selectedCategories = ['Todos'];
+            }
+          }
+
+          searchInput.value = '';
+          renderCategoryButtons();
+          filterAndRenderMovies();
+        });
+        categoryContainer.appendChild(button);
+      });
+    }
+
+    function filterAndRenderMovies() {
+      let filteredMovies = movies;
+
+      if (!selectedCategories.includes('Todos') && selectedCategories.length > 0) {
+        filteredMovies = filteredMovies.filter(movie =>
+          selectedCategories.some(cat => movie.categories.includes(cat))
+        );
+      }
+
+      const searchTerm = removeAccents(searchInput.value.toLowerCase().trim());
+      if (searchTerm) {
+        const searchWords = searchTerm.split(' ').filter(word => word.length > 0);
+
+        filteredMovies = filteredMovies.filter(movie => {
+          const movieNameNormalized = removeAccents(movie.name.toLowerCase());
+          // Verifica se todas as palavras do termo de pesquisa estão presentes no nome do filme
+          return searchWords.every(word => movieNameNormalized.includes(word));
+        });
+      }
+
+      renderMovies(filteredMovies);
+    }
+
+    function renderMovies(filteredMovies) {
+      movieListContainer.innerHTML = '';
+      if (filteredMovies.length === 0) {
+        noResultsMessage.style.display = 'block';
+      } else {
+        noResultsMessage.style.display = 'none';
+        filteredMovies.forEach(movie => {
+          const movieCard = document.createElement('div');
+          movieCard.classList.add('movie-card');
+          movieCard.innerHTML = `<img src="${movie.image}" alt="${movie.name}"><h3>${movie.name}</h3>`;
+          movieCard.addEventListener('click', () => playMovie(movie.url));
+          movieListContainer.appendChild(movieCard);
+        });
+      }
+    }
+
+    function playMovie(url) {
+      moviePlayer.src = url;
+      playerOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    backButton.addEventListener('click', () => {
+      playerOverlay.classList.remove('active');
+      moviePlayer.src = '';
+      document.body.style.overflow = 'auto';
+    });
+
+    searchInput.addEventListener('input', () => {
+      selectedCategories = ['Todos'];
+      renderCategoryButtons();
+      filterAndRenderMovies();
+    });
+
+    renderCategoryButtons();
+    filterAndRenderMovies();
+  </script>
+</body>
+</html>
